@@ -11,3 +11,4 @@ chroma_db/
 
 # Docker volumes / local data overrides
 data/
+.DS_Store
