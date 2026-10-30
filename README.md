@@ -1,6 +1,19 @@
+Here is your updated, fully polished `README.md` file. It incorporates your live Streamlit cloud demo link, updates the architecture and setup instructions to reflect your self-contained cloud deployment, and maintains the professional Forward Deployed Engineer (FDE) tone:
+
+```markdown
 # Cold-Chain Operations Copilot API
 
 ### An End-to-End Enterprise Solution for Real-Time Thermal & Spatial Telemetry Monitoring
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://cold-chain-logistics-fde-project.streamlit.app/)
+[![CI/CD Pipeline](https://github.com/poornima1508/cold-chain-logistics-fde-project/actions/workflows/ci.yml/badge.svg)](https://github.com/poornima1508/cold-chain-logistics-fde-project/actions)
+
+---
+
+## 🚀 Live Demo
+
+Test the live interactive dashboard right now in your browser:
+👉 **[https://cold-chain-logistics-fde-project.streamlit.app/](https://cold-chain-logistics-fde-project.streamlit.app/)**
 
 ---
 
@@ -12,9 +25,9 @@ In high-stakes supply chain logistics—specifically pharmaceutical distribution
 
 ### Traditional System Failure Modes
 
-* **Post-Hoc Anomaly Detection:** Most logistics fleets record temperature data locally on data loggers, meaning excursions are only identified *after* the cargo arrives at a distribution warehouse—when it is already too late to intervene.
-* **Disconnected Data Silos:** Geographic tracking (GPS), sensor telematics (temperature/humidity), and operational compliance protocols exist in fragmented databases and PDF manuals.
-* **Manual Compliance Lookup:** When an alarm triggers, fleet dispatchers must manually cross-reference complex regulatory documentation (e.g., Protocol Directive `FRU-02`) to figure out whether to adjust reefer settings, reroute the vessel, or declare cargo total loss.
+- **Post-Hoc Anomaly Detection:** Most logistics fleets record temperature data locally on data loggers, meaning excursions are only identified *after* the cargo arrives at a distribution warehouse—when it is already too late to intervene.
+- **Disconnected Data Silos:** Geographic tracking (GPS), sensor telematics (temperature/humidity), and operational compliance protocols exist in fragmented databases and PDF manuals.
+- **Manual Compliance Lookup:** When an alarm triggers, fleet dispatchers must manually cross-reference complex regulatory documentation (e.g., Protocol Directive `FRU-02`) to figure out whether to adjust reefer settings, reroute the vessel, or declare cargo total loss.
 
 ---
 
@@ -34,44 +47,43 @@ As a **Forward Deployed Engineer (FDE)**, the core responsibility was bridging t
 
 ### FDE Implementation Deliverables:
 
-1. **Designed & Built the Core Application Architecture:** Formulated an asynchronous RESTful API using **FastAPI** to process live telemetry streams with minimal overhead.
-2. **Modeled Relational & Spatial Telemetry:** Configured **PostgreSQL** alongside **SQLAlchemy ORM** and **Pydantic** to validate incoming IoT telemetry (latitude, longitude, temperature, humidity, timestamps) and maintain historical audit trails.
-3. **Implemented Local RAG Reasoning:** Built a vector storage pipeline in **ChromaDB** to index domain-specific compliance protocols (such as Protocol Directive `FRU-02`). Connected this retrieval step to **Ollama** to evaluate thermal breaches against real policies and generate actionable risk mitigations.
-4. **Containerized Infrastructure & IaC:** Orchestrated the entire stack (FastAPI, PostgreSQL, ChromaDB, Ollama) using **Docker & Docker Compose** for one-command deployment across distributed nodes.
-5. **Established CI/CD Automation:** Authored a **GitHub Actions** workflow that builds container instances, verifies database initialization, and performs automated smoke testing against endpoints on every main branch update.
+1. **Designed & Built the Core Application Architecture:** Formulated an intuitive, self-contained dashboard UI using **Streamlit** for zero-friction recruiter and stakeholder review.
+2. **Modeled Relational & Spatial Telemetry:** Configured data structures alongside **Pydantic** to validate incoming IoT telemetry (latitude, longitude, temperature, humidity, timestamps) and maintain historical audit trails.
+3. **Implemented Local RAG Reasoning:** Configured domain-specific compliance protocols (such as Protocol Directive `FRU-02`) connected to reasoning logic to evaluate thermal breaches against real policies and generate actionable risk mitigations.
+4. **Containerized Infrastructure & IaC:** Orchestrated the application stack using **Docker & Docker Compose** for one-command deployment across distributed nodes.
+5. **Established CI/CD Automation:** Authored a **GitHub Actions** workflow that builds container instances, verifies initialization, and performs automated validation on every main branch update.
 
 ---
 
 ## 4. End-to-End System Architecture
 
+
 ```
-                       [ High-Frequency IoT Sensors ]
-                                     │
-                                     ▼
-                      +-----------------------------+
-                      |   FastAPI Ingestion Engine  |
-                      |    (Validation & Routing)   |
-                      +-----------------------------+
-                            /               \
-                           /                 \
-                          ▼                   ▼
-            +-------------------+    +-------------------+
-            |   PostgreSQL DB   |    |  ChromaDB Vector  |
-            | (Telemetry Logs & |    |  (Indexed SOPs &  |
-            |  Shipment States) |    | Directive FRU-02) |
-            +-------------------+    +-------------------+
-                                               │
-                                               ▼
-                                     +-------------------+
-                                     | Ollama LLM Engine |
-                                     | (RAG Reasoning)   |
-                                     +-------------------+
-                                               │
-                                               ▼
-                                     +-------------------+
-                                     | Actionable Output |
-                                     | (Mitigation Plan) |
-                                     +-------------------+
+
+```
+               [ High-Frequency IoT Sensors ]
+                             │
+                             ▼
+               +-----------------------------+
+               | Streamlit Operations Copilot|
+               | (Frontend UI & Logic Engine)|
+               +-----------------------------+
+                 /                     \
+                /                       \
+               ▼                         ▼
+     +-------------------+     +-------------------+
+     |  Telemetry Logs   |     | Compliance RAG DB |
+     | (Active Shipments |     | (Indexed SOPs &   |
+     | & Excursion Data) |     | Directive FRU-02) |
+     +-------------------+     +-------------------+
+                                       │
+                                       ▼
+                               +-------------------+
+                               | Actionable Output |
+                               | (Mitigation Plan) |
+                               +-------------------+
+
+```
 
 ```
 
@@ -79,21 +91,20 @@ As a **Forward Deployed Engineer (FDE)**, the core responsibility was bridging t
 
 ## 5. Technical Highlights & Stack Details
 
-* **Backend Engineering:** FastAPI, Pydantic, Jinja2, Uvicorn
-* **Persistence & Database:** PostgreSQL, SQLAlchemy ORM
-* **AI / Vector Search / RAG:** ChromaDB (Vector Store), Ollama (Local LLM Inference)
-* **DevOps & Infrastructure:** Docker, Docker Compose, GitHub Actions (CI/CD Pipeline)
+- **Frontend & UI:** Streamlit, Python
+- **Persistence & Data Modeling:** SQLAlchemy ORM, Pydantic, PostgreSQL
+- **AI / Vector Search / RAG:** ChromaDB (Vector Store), Ollama (Local LLM Inference)
+- **DevOps & Infrastructure:** Docker, Docker Compose, GitHub Actions (CI/CD Pipeline)
 
 ---
 
-## 6. Primary API Endpoints
+## 6. Primary System Capabilities
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/shipments` | Retrieves all active shipments, current spatial/thermal readings, and risk alerts. |
-| `POST` | `/telemetry` | Ingests live IoT sensor metrics (`temperature`, `humidity`, `gps_lat`, `gps_lng`) with strict typing. |
-| `POST` | `/copilot/evaluate` | Evaluates a specific shipment excursion using local RAG and returns recommended SOP steps. |
-| `GET` | `/health` | Live readiness probe endpoint used by container orchestrators and CI/CD pipelines. |
+| Feature Component | Description |
+| --- | --- |
+| `📦 Shipment Telemetry` | Retrieves active shipments, current spatial/thermal readings, and real-time excursion risk alerts. |
+| `🤖 Compliance Copilot` | Evaluates specific shipment excursions using contextual RAG retrieval and returns recommended SOP steps. |
+| `☁️ Public Cloud Deployment` | Fully accessible out-of-the-box via Streamlit Community Cloud without external backend server dependencies. |
 
 ---
 
@@ -101,26 +112,34 @@ As a **Forward Deployed Engineer (FDE)**, the core responsibility was bridging t
 
 ### Prerequisites
 
-* [Docker Engine](https://docs.docker.com/get-docker/) & [Docker Compose](https://docs.docker.com/compose/)
-* Python 3.10+ (for local environment debugging)
-* Git
+- [Docker Engine](https://docs.docker.com/get-docker/) & [Docker Compose](https://docs.docker.com/compose/)
+- Python 3.10+ (for local environment debugging)
+- Git
 
 ### Deployment Steps
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/poornima1508/cold-chain-logistics-fde-project.git
+git clone [https://github.com/poornima1508/cold-chain-logistics-fde-project.git](https://github.com/poornima1508/cold-chain-logistics-fde-project.git)
 cd cold-chain-logistics-fde-project
 
 ```
 
+2. **Run Streamlit Locally (Alternative):**
 
-2. **Launch full stack via Docker Compose:**
+```bash
+pip install -r requirements.txt
+streamlit run app/frontend.py
+
+```
+
+3. **Launch Full Docker Stack (Optional):**
+
 ```bash
 docker-compose up -d --build
 
 ```
 
+```
 
-3. **Verify Deployment:**
-Open `http://localhost:8000/docs` in your browser to interact with the OpenAPI Swagger interface.
+```
