@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cold-Chain Operations Copilot</title>
+    <!-- Tailwind CSS for modern enterprise UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+    
+    <!-- Navbar -->
+    <header class="bg-slate-900 border-b border-slate-800 p-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 p-2 rounded-lg text-white font-bold">❄️ FDE</div>
+                <h1 class="text-xl font-bold tracking-wide">Cold-Chain Operations Copilot</h1>
+            </div>
+            <span class="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-3 py-1 rounded-full font-medium">● Local Air-Gapped / RAG Active</span>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Grid -->
+    <main class="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left Panel: Shipments List & Status -->
+        <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col justify-between">
+            <div>
+                <h2 class="text-lg font-semibold mb-4 text-slate-200 border-b border-slate-800 pb-2">📦 Active Shipments</h2>
+                <div id="shipments-list" class="space-y-3">
+                    <p class="text-slate-500 text-sm">Loading shipments...</p>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-800 text-xs text-slate-400">
+                <p>Click any shipment code to auto-load it into the AI Copilot reasoner.</p>
+            </div>
+        </section>
+
+        <!-- Right Panel: AI Copilot Chat & Analysis Interface -->
+        <section class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col justify-between">
+            <div>
+                <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-2">
+                    <h2 class="text-lg font-semibold text-slate-200">🤖 AI Reasoning Engine (Ollama + ChromaDB RAG)</h2>
+                    <span id="selected-shipment-badge" class="text-xs bg-blue-950 text-blue-400 border border-blue-800 px-2.5 py-1 rounded">No shipment selected</span>
+                </div>
+
+                <!-- Copilot Output Display Box -->
+                <div id="copilot-output" class="bg-slate-950 border border-slate-800 rounded-lg p-4 h-96 overflow-y-auto text-sm text-slate-300 whitespace-pre-wrap font-mono mb-4">
+Welcome to the Cold-Chain FDE Copilot. Select a shipment on the left or type a query below to cross-reference live database telemetry with vector compliance manuals.
+                </div>
+            </div>
+
+            <!-- Input Controls -->
+            <div class="flex gap-3">
+                <input type="text" id="prompt-input" placeholder="e.g., Analyze this shipment for compliance breaches..." class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-600">
+                <button onclick="runCopilotAnalysis()" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-3 rounded-lg text-sm transition-colors shadow-md">
+                    Run Analysis
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Frontend Controller Logic -->
+    <script>
+        let activeShipmentCode = "SHP-FRU-002"; // Default to our breached test shipment
+
+        async function fetchShipments() {
+            try {
+                const response = await fetch('/shipments');
+                const shipments = await response.json();
+                const listContainer = document.getElementById('shipments-list');
+                listContainer.innerHTML = '';
+
+                shipments.forEach(s => {
+                    const isBreach = s.status === 'Alert';
+                    const card = document.createElement('div');
+                    card.className = `p-3 rounded-lg border cursor-pointer transition-all ${s.shipment_code === activeShipmentCode ? 'border-blue-500 bg-slate-800' : 'border-slate-800 bg-slate-950 hover:bg-slate-800'}`;
+                    card.onclick = () => selectShipment(s.shipment_code);
+                    
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-bold text-sm text-slate-100">${s.shipment_code}</span>
+                            <span class="text-xs px-2 py-0.5 rounded font-semibold ${isBreach ? 'bg-red-950 text-red-400 border border-red-800' : 'bg-emerald-950 text-emerald-400 border border-emerald-800'}">${s.status}</span>
+                        </div>
+                        <div class="text-xs text-slate-400">${s.product_type}</div>
+                        <div class="text-xs text-slate-500 mt-1">${s.origin} → ${s.destination}</div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+                
+                document.getElementById('selected-shipment-badge').innerText = `Target: ${activeShipmentCode}`;
+            } catch (err) {
+                console.error("Failed to load shipments", err);
+            }
+        }
+
+        function selectShipment(code) {
+            activeShipmentCode = code;
+            document.getElementById('selected-shipment-badge').innerText = `Target: ${activeShipmentCode}`;
+            fetchShipments(); // Refresh highlight
+        }
+
+        async function runCopilotAnalysis() {
+            const promptInput = document.getElementById('prompt-input');
+            const outputBox = document.getElementById('copilot-output');
+            const prompt = promptInput.value || "Analyze this shipment for temperature compliance violations and suggest protocols.";
+
+            outputBox.innerText = `Analyzing shipment ${activeShipmentCode} using local LLM + vector RAG... Please wait...`;
+
+            try {
+                const response = await fetch('/copilot/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt, shipment_code: activeShipmentCode })
+                });
+                const data = await response.json();
+                outputBox.innerText = data.copilot_analysis;
+            } catch (err) {
+                outputBox.innerText = `Error connecting to copilot backend: ${err}`;
+            }
+        }
+
+        // Load list on page start
+        fetchShipments();
+    </script>
+</body>
+</html>

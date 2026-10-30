@@ -1,0 +1,13 @@
+# Python / Virtual Environment
+venv/
+__pycache__/
+*.py[cod]
+.env
+
+# Database and Local Storage
+*.db
+*.sqlite3
+chroma_db/
+
+# Docker volumes / local data overrides
+data/
