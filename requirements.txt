@@ -16,3 +16,4 @@ langchain-ollama
 langgraph>=0.0.20
 jinja2
 pytest>=8.0.0
+streamlit

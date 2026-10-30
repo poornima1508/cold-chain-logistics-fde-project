@@ -84,3 +84,9 @@ def analyze_shipment_with_copilot(query: CopilotQuery):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/query")
+def query_alias(query: CopilotQuery):
+    """Alias endpoint for /query to gracefully support frontends looking for /query."""
+    return analyze_shipment_with_copilot(query)
