@@ -12,7 +12,8 @@ st.markdown("### Real-time IoT Telemetry Monitoring & RAG-Powered Regulatory Com
 
 # Sidebar for navigation or settings
 st.sidebar.header("Configuration")
-api_base_url = st.sidebar.text_input("FastAPI Backend URL", value="http://localhost:8000")
+default_url = st.secrets.get("BACKEND_URL", "http://localhost:8000")
+api_base_url = st.sidebar.text_input("FastAPI Backend URL", value=default_url)
 
 # Main Dashboard Tabs
 tab1, tab2 = st.tabs(["📦 Shipment Telemetry", "🤖 Compliance Copilot"])
